@@ -1,0 +1,26 @@
+@font-face {
+    font-family: "neon-like";
+    src: url("../font/NEONLIKE.TTF");
+}
+
+@font-face {
+    font-family: "bardiademon";
+    src: url("../font/Poppins-Light.ttf");
+}
+
+#splash {
+    -fx-background-image: url("../images/splash-background.jpg");
+    -fx-background-size: 100%;
+}
+
+#app-name {
+    -fx-font-family: "neon-like";
+    -fx-font-size: 30px;
+}
+
+#bardiademon {
+    -fx-font-family: "bardiademon";
+    /*-fx-font-size: 20px;*/
+}
+
+

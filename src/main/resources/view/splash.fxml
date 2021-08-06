@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="splash" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="770.0" stylesheets="@../style/splash.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bardiademon.BardiaMusicPlayer.controllers.SplashController">
+    <children>
+        <Text id="bardiademon" fill="WHITE" layoutX="619.0" layoutY="383.0" strokeType="OUTSIDE" strokeWidth="0.0" text="powered by bardiademon" />
+        <Text id="app-name" fill="WHITE" layoutX="244.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bardia Music Player v1.0.0" textAlignment="CENTER" />
+    </children>
+</AnchorPane>
