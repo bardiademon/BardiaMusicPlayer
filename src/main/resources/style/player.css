@@ -1,0 +1,33 @@
+#player
+{
+    -fx-background-color: #1b1c22;
+}
+
+@font-face
+{
+    font-family: "poppins";
+    src: url("../font/Poppins-Light.ttf");
+}
+
+
+#btn-play
+{
+    -fx-background-image: url("../images/player/player-play.png");
+    -fx-background-size: 20%;
+    -fx-background-repeat: no-repeat;
+}
+
+#control
+{
+    -fx-background-color: #1b1c22;
+    -fx-effect: dropshadow(gaussian, #939393, 2, 0, 0, 0);
+}
+
+#btn-list
+{
+    -fx-font-family: "poppins";
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, rgb(255, 255, 255), 10, 0.1, 0, 0);
+    -fx-letter-spacing: 5px;
+}
+

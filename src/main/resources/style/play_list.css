@@ -1,0 +1,15 @@
+#layout, .bgcolor
+{
+    -fx-background-color: #1b1c22;
+}
+
+.list-view .list-cell
+{
+    -fx-background-color: #1b1c22;
+    -fx-text-fill: #FFF;
+}
+
+.list-view .list-cell:hover
+{
+    -fx-background-color: #5c5e68;
+}

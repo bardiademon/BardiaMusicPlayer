@@ -1,0 +1,40 @@
+#main-layout
+{
+    -fx-background-color: #1b1c22;
+}
+
+.text-field
+{
+    -fx-text-fill: #fff;
+    -fx-prompt-text-fill: #c6c6c6;
+}
+
+.check-box .label
+{
+    -fx-text-fill: #fff;
+}
+
+#btn-choose-dir
+{
+    -fx-background-color: #ead41f;
+}
+
+#btn-choose-file
+{
+    -fx-background-color: #b16a11;
+}
+
+#btn-add-play-list
+{
+    -fx-background-color: #0c571c;
+}
+
+#btn-cancel
+{
+    -fx-background-color: #791212;
+}
+
+#explorer
+{
+    -fx-background-color: #3f4150;
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXCheckbox?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.materialfx.controls.MFXTreeView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="main-layout" prefHeight="529.0" prefWidth="416.0" stylesheets="@../../style/NewPlayList.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bardiademon.BardiaMusicPlayer.controllers.PlayList.NewPlayListController">
+    <children>
+        <MFXTextField fx:id="txtListName" layoutX="14.0" layoutY="19.0" lineStrokeCap="BUTT" prefHeight="25.0" prefWidth="393.0" promptText="Play list name" />
+        <MFXButton id="btn-choose-dir" fx:id="btnDirectoryChoose" layoutX="14.0" layoutY="65.0" onAction="#onClickBtnDirectoryChoose" text="Choose directory">
+            <graphic>
+                <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../images/NewPlayLIst/ChooseDir.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </MFXButton>
+        <MFXButton id="btn-choose-file" fx:id="btnFileChoose" layoutX="158.0" layoutY="63.0" onAction="#onClickBtnFileChoose" text="Choose file" textFill="WHITE">
+            <graphic>
+                <ImageView fitHeight="21.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../images/NewPlayLIst/ChooseFile.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </MFXButton>
+        <MFXCheckbox fx:id="chkSelectToRemove" checkedColor="#219059" layoutX="261.0" layoutY="62.0" prefHeight="31.0" prefWidth="141.0" text="Select to remove" textFill="WHITE" uncheckedColor="WHITE" />
+        <MFXTreeView id="explorer" fx:id="explorer" layoutX="11.0" layoutY="102.0" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#onClickExplorer" prefHeight="377.0" prefWidth="393.0" />
+        <MFXButton id="btn-add-play-list" fx:id="btnAdd" layoutX="11.0" layoutY="490.0" onAction="#onClickBtnAdd" prefHeight="30.0" prefWidth="141.0" text="Add play list" textFill="WHITE">
+            <graphic>
+                <ImageView fx:id="imtBtnAdd" fitHeight="22.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../images/NewPlayLIst/Completed.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </MFXButton>
+        <MFXButton id="btn-cancel" fx:id="btnCancel" layoutX="319.0" layoutY="490.0" onAction="#onClickBtnCancel" prefHeight="30.0" prefWidth="83.0" text="Cancel" textFill="WHITE">
+            <graphic>
+                <ImageView fitHeight="21.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../images/NewPlayLIst/Cancel.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </MFXButton>
+      <Text fx:id="txtResult" fill="WHITE" layoutX="180.0" layoutY="510.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="108.13671875" />
+    </children>
+</AnchorPane>

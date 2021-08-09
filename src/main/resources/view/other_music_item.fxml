@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="other-music-item" fx:id="anchorPane" prefHeight="173.0" prefWidth="101.0" stylesheets="@../style/other_music_item.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ImageView fitHeight="112.0" fitWidth="82.0" layoutX="10.0" layoutY="8.0" pickOnBounds="true">
+            <image>
+                <Image url="@../images/splash-background.jpg" />
+            </image>
+        </ImageView>
+        <Text fx:id="txtTitle" fill="WHITE" layoutX="10.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="information-music-item" text="Title" wrappingWidth="82.0" />
+        <Text fx:id="txtAlbum" fill="WHITE" layoutX="10.0" layoutY="156.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="information-music-item" text="Album" wrappingWidth="82.0" />
+    </children>
+</AnchorPane>

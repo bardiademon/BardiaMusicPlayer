@@ -2,6 +2,9 @@ package com.bardiademon.BardiaMusicPlayer;
 
 import com.bardiademon.BardiaMusicPlayer.bardiademon.Log;
 import com.bardiademon.BardiaMusicPlayer.controllers.PlayerController;
+import com.bardiademon.BardiaMusicPlayer.models.Database;
+import com.bardiademon.BardiaMusicPlayer.models.Musics.MusicsService;
+import com.bardiademon.BardiaMusicPlayer.models.PlayList.PlayListService;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +19,11 @@ import java.util.Objects;
 
 public final class Main extends Application
 {
+
+    private static Database DATABASE;
+
+    private static final MusicsService MUSICS_SERVICE = new MusicsService ();
+    private static final PlayListService PLAY_LIST_SERVICE = new PlayListService ();
 
     @Override
     public void start (final Stage stage) throws Exception
@@ -94,6 +102,11 @@ public final class Main extends Application
         return objController.controller;
     }
 
+    public static FXMLLoader GetFXMLLoader (final String fxmlName)
+    {
+        return (new FXMLLoader (GetResource ("view/" + fxmlName + ".fxml")));
+    }
+
     public static URL GetResource (final String Path)
     {
         try
@@ -115,8 +128,25 @@ public final class Main extends Application
         void GetController (final T t , final Stage stage);
     }
 
-    public static void main (final String[] args)
+    public static void main (final String[] args) throws ClassNotFoundException
     {
+        Class.forName ("org.sqlite.JDBC");
+        DATABASE = new Database ();
         launch (args);
+    }
+
+    public static Database getDatabase ()
+    {
+        return DATABASE;
+    }
+
+    public static PlayListService getPlayListService ()
+    {
+        return PLAY_LIST_SERVICE;
+    }
+
+    public static MusicsService getMusicsService ()
+    {
+        return MUSICS_SERVICE;
     }
 }
