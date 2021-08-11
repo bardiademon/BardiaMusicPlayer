@@ -22,6 +22,7 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +30,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public final class NewPlayListController implements Initializable
@@ -149,11 +151,14 @@ public final class NewPlayListController implements Initializable
                             @Override
                             public void FindTimeFile (long NumberOfFileFind , FindAllFile.Find FileFind)
                             {
-                                final long id = Main.getMusicsService ().addMusic (FileFind.file.getAbsolutePath ());
-                                if (id > 0)
+                                if (checkMusic (FileFind.file.getAbsolutePath ()))
                                 {
-                                    setCounterFindFile ();
-                                    musicsIds.add (id);
+                                    final long id = Main.getMusicsService ().addMusic (FileFind.file.getAbsolutePath ());
+                                    if (id > 0)
+                                    {
+                                        setCounterFindFile ();
+                                        musicsIds.add (id);
+                                    }
                                 }
                             }
 
@@ -191,13 +196,16 @@ public final class NewPlayListController implements Initializable
                     }
                     else
                     {
-                        final long id = Main.getMusicsService ().addMusic (file.getAbsolutePath ());
-                        if (id > 0)
+                        if (checkMusic (file.getAbsolutePath ()))
                         {
-                            setCounterFindFile ();
-                            musicsIds.add (id);
-                            index++;
+                            final long id = Main.getMusicsService ().addMusic (file.getAbsolutePath ());
+                            if (id > 0)
+                            {
+                                setCounterFindFile ();
+                                musicsIds.add (id);
+                            }
                         }
+                        index++;
                     }
                 }
                 finish ();
@@ -205,6 +213,12 @@ public final class NewPlayListController implements Initializable
             else ShowMessage.Show (Alert.AlertType.ERROR , "Not selected" , "Files not selected" , "Not selected");
         }
         else ShowMessage.Show (Alert.AlertType.ERROR , "List name" , "List name is empty" , "Empty");
+    }
+
+    private boolean checkMusic (final String path)
+    {
+        final String extension = FilenameUtils.getExtension (path);
+        return (extension != null && !extension.isEmpty () && extension.toLowerCase(Locale.ROOT).equals ("mp3"));
     }
 
     public void setCounterFindFile ()

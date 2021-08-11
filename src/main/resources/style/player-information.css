@@ -21,27 +21,6 @@
     -fx-background-color: #1b1c22;
 }
 
-.other-music .list-cell:even
-{
-    -fx-background-color: #1b1c22;
-    -fx-text-fill: #FFF;
-}
-
-.other-music .list-cell:odd
-{
-    -fx-background-color: #1b1c22;
-    -fx-text-fill: #FFF;
-}
-
-.other-music .scroll-bar:horizontal .increment-arrow,
-.other-music .scroll-bar:horizontal .decrement-arrow,
-.other-music .scroll-bar:horizontal .increment-button,
-.other-music .scroll-bar:horizontal .decrement-button
-{
-    -fx-padding: 0;
-    -fx-background-color: #FFF;
-}
-
 #other-music
 {
     -fx-background-color: #1b1c22;

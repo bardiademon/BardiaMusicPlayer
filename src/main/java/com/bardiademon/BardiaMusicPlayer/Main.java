@@ -25,6 +25,10 @@ public final class Main extends Application
     private static final MusicsService MUSICS_SERVICE = new MusicsService ();
     private static final PlayListService PLAY_LIST_SERVICE = new PlayListService ();
 
+    private static PlayerController playerController;
+
+    private static Stage stage;
+
     @Override
     public void start (final Stage stage) throws Exception
     {
@@ -33,6 +37,8 @@ public final class Main extends Application
         stage.setTitle ("Hello World");
         stage.setScene (new Scene (root));
         stage.show ();
+
+        setStage (stage);
 
         new Thread (() ->
         {
@@ -135,6 +141,21 @@ public final class Main extends Application
         launch (args);
     }
 
+    public static PlayerController getPlayerController ()
+    {
+        return playerController;
+    }
+
+    public static void setStage (final Stage stage)
+    {
+        Main.stage = stage;
+    }
+
+    public static void setPlayerController (final PlayerController playerController)
+    {
+        Main.playerController = playerController;
+    }
+
     public static Database getDatabase ()
     {
         return DATABASE;
@@ -148,5 +169,10 @@ public final class Main extends Application
     public static MusicsService getMusicsService ()
     {
         return MUSICS_SERVICE;
+    }
+
+    public static Stage getStage ()
+    {
+        return stage;
     }
 }

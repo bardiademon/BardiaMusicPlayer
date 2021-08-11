@@ -51,5 +51,14 @@
                 </ImageView>
             </graphic>
         </MFXButton>
+      <MFXButton fx:id="btnPlay" disable="true" layoutX="269.0" layoutY="18.0" onAction="#onClickBtnPlay" text="Play">
+         <graphic>
+            <ImageView fitHeight="22.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/play_list/ic-play.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </MFXButton>
     </children>
 </AnchorPane>

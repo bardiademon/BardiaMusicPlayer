@@ -2,6 +2,8 @@ package com.bardiademon.BardiaMusicPlayer.controllers;
 
 import com.bardiademon.BardiaJlayer.javazoom.jl.decoder.JavaLayerException;
 import com.bardiademon.BardiaMusicPlayer.Main;
+import com.bardiademon.BardiaMusicPlayer.bardiademon.Log;
+import com.bardiademon.BardiaMusicPlayer.bardiademon.Path;
 import com.bardiademon.MusicPlayer.BardiaPlayer;
 import com.bardiademon.MusicPlayer.On;
 import com.bardiademon.MusicPlayer.bardiademon.ConvertDuration;
@@ -17,10 +19,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -28,18 +29,44 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import org.apache.commons.io.FilenameUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public final class PlayerController implements Initializable
+public final class PlayerController implements Initializable, On
 {
+
+    private boolean sliderPlayerBlocked;
+
+    private boolean playMusic;
+
     @FXML
-    public ImageView btnPlay;
+    public MFXButton btnControlNext;
+
+    @FXML
+    public ImageView imgBtnControlPlay;
+
+    @FXML
+    public MFXButton btnControlPlay;
+
+    @FXML
+    public MFXSlider sliderVolume;
+
+    @FXML
+    public MFXButton btnControlPre;
+
+    private BardiaPlayer player;
+
+    private int indexPlay;
 
     @FXML
     public Text txtMusicTime;
@@ -83,23 +110,223 @@ public final class PlayerController implements Initializable
     @FXML
     public Text txtTime;
 
-    @FXML
-    private AnchorPane playerPane;
 
     @FXML
-    public MFXListView <Musics> otherMusic;
+    public MFXListView <PathMusic> otherMusic;
 
     @FXML
     public MFXButton btnPlayer;
 
-    final ObservableList <Musics> musics = FXCollections.observableArrayList ();
+    final ObservableList <PathMusic> musicPath = FXCollections.observableArrayList ();
 
-    private static final List <String> musicPath = new ArrayList <> ();
+    private Image imgPlay, imgPause;
 
     @FXML
-    public AnchorPane main;
+    public AnchorPane main, playerPane;
 
     private Panes panes;
+
+    @Override
+    public void onProgress (int i)
+    {
+        if (!sliderPlayerBlocked) Platform.runLater (() -> sliderPlayer.setValue (i));
+    }
+
+    @Override
+    public void onMusicTime (ConvertDuration.Time time)
+    {
+        Platform.runLater (() -> txtMusicTime.setText (time.toString ()));
+    }
+
+    @Override
+    public void onName (String s)
+    {
+        Platform.runLater (() -> txtName.setText (s));
+    }
+
+    @Override
+    public void onMetadata (ID3v1 id3v1)
+    {
+        setInfoMusic (id3v1.getArtist () , id3v1.getTitle () , id3v1.getAlbum () , id3v1.getYear ());
+    }
+
+    @Override
+    public void onMetadata (ID3v2 id3v2)
+    {
+        setInfoMusic (id3v2.getArtist () , id3v2.getTitle () , id3v2.getAlbum () , id3v2.getYear ());
+    }
+
+    private void setInfoMusic (final String artist , final String title , final String album , final String year)
+    {
+        Platform.runLater (() ->
+        {
+            txtArtist.setText (artist);
+            txtTitle.setText (title);
+            txtAlbum.setText (album);
+            txtYear.setText (year);
+        });
+    }
+
+    @Override
+    public void onMetadataError ()
+    {
+        setInfoMusic ("" , "" , "" , "");
+    }
+
+    @Override
+    public void onAlbumImage (final InputStream inputStream)
+    {
+        Platform.runLater (() ->
+        {
+            try
+            {
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream (inputStream.available ());
+                outputStream.write (inputStream.readAllBytes ());
+
+                musicImage.setImage (new Image (new ByteArrayInputStream (outputStream.toByteArray ())));
+
+                Platform.runLater (() ->
+                {
+                    Main.getStage ().getIcons ().clear ();
+                    Main.getStage ().getIcons ().add (new Image (new ByteArrayInputStream (outputStream.toByteArray ())));
+                });
+            }
+            catch (final IOException e)
+            {
+                Log.N (e);
+            }
+        });
+    }
+
+    @Override
+    public void onAlbumImageError ()
+    {
+        final URL url = Main.GetResource (Path.R_MUSIC);
+        if (url != null) Platform.runLater (() ->
+        {
+            try
+            {
+                musicImage.setImage (new Image (url.openStream ()));
+            }
+            catch (final IOException e)
+            {
+                Log.N (e);
+            }
+        });
+    }
+
+    @Override
+    public void onCompleteInfo ()
+    {
+
+    }
+
+    @Override
+    public void onTime (ConvertDuration.Time time)
+    {
+        Platform.runLater (() -> txtTime.setText (time.toString ()));
+    }
+
+    @Override
+    public void onStart ()
+    {
+        playMusic = true;
+
+        player.setVolume ((float) sliderVolume.getValue ());
+
+        Platform.runLater (() ->
+        {
+            imgBtnControlPlay.setImage (imgPlay);
+            btnControlPlay.setText ("Pause");
+        });
+    }
+
+    @Override
+    public void onStop ()
+    {
+        playMusic = false;
+        setBtnPause ();
+    }
+
+    @Override
+    public void onPause ()
+    {
+        playMusic = false;
+        setBtnPause ();
+    }
+
+    private void setBtnPause ()
+    {
+        Platform.runLater (() ->
+        {
+            imgBtnControlPlay.setImage (imgPause);
+            btnControlPlay.setText ("Play");
+        });
+    }
+
+    @Override
+    public void onCompleted ()
+    {
+        next ();
+    }
+
+    @Override
+    public void onError (Exception e)
+    {
+        next ();
+    }
+
+    @Override
+    public void onJavaLayerException (JavaLayerException e)
+    {
+        next ();
+    }
+
+    @Override
+    public void onDie ()
+    {
+        playMusic = false;
+    }
+
+    @FXML
+    public void onClickBtnControlNext ()
+    {
+        next ();
+    }
+
+    @FXML
+    public void onClickBtnControlPlay ()
+    {
+    }
+
+    @FXML
+    public void onClickBtnControlPre ()
+    {
+        pre ();
+    }
+
+    @FXML
+    public void onMouseReleasedVolume ()
+    {
+        if (player != null)
+            player.setVolume ((float) sliderVolume.getValue ());
+    }
+
+    @FXML
+    public void onPressedSliderPlayer ()
+    {
+        sliderPlayerBlocked = true;
+    }
+
+    @FXML
+    public void onClickReleasedPlayer ()
+    {
+        if (player != null)
+            player.setProgress ((int) sliderPlayer.getValue ());
+
+        sliderPlayerBlocked = false;
+    }
+
 
     private enum Panes
     {
@@ -109,6 +336,33 @@ public final class PlayerController implements Initializable
     @Override
     public void initialize (final URL url , final ResourceBundle resourceBundle)
     {
+
+        final URL urlPlayerPlay = Main.GetResource (Path.R_PLAYER_PLAY);
+        if (urlPlayerPlay != null)
+        {
+            try
+            {
+                imgPlay = new Image (urlPlayerPlay.openStream ());
+            }
+            catch (final IOException e)
+            {
+                Log.N (e);
+            }
+        }
+        final URL urlPlayerPause = Main.GetResource (Path.R_PLAYER_PAUSE);
+        if (urlPlayerPause != null)
+        {
+            try
+            {
+                imgPause = new Image (urlPlayerPause.openStream ());
+            }
+            catch (final IOException e)
+            {
+                Log.N (e);
+            }
+        }
+
+
         setBtnList (btnPlayList , btnMusics , btnFavourites , btnSelectedMusic , btnPlayedMusic , btnPlayer);
         if (panes == null || !panes.equals (Panes.player))
         {
@@ -126,6 +380,9 @@ public final class PlayerController implements Initializable
             {
                 fxmlLoader.setController (PlayerController.this);
                 fxmlLoader.load ();
+          
+                otherMusic.setBackground (new Background (new BackgroundFill (Color.BLACK , new CornerRadii (0) , new Insets (0))));
+
                 main.getChildren ().clear ();
                 main.getChildren ().add (playerPane);
 
@@ -136,6 +393,7 @@ public final class PlayerController implements Initializable
                     clip.setArcHeight (50);
                     musicImage.setClip (clip);
                 });
+                if (player != null) player.getMetadata ();
                 setOtherMusic ();
             }
             catch (IOException ignored)
@@ -146,14 +404,8 @@ public final class PlayerController implements Initializable
 
     private void setOtherMusic ()
     {
-        musics.clear ();
         if (musicPath.size () > 0)
-        {
-            otherMusic.setOrientation (Orientation.HORIZONTAL);
-            otherMusic.setItems (musics);
-            otherMusic.setBackground (new Background (new BackgroundFill (Color.BLACK , new CornerRadii (0) , new Insets (0))));
-            otherMusic.setCellFactory (otherMusicItemListView -> new OtherMusicItemController ());
-        }
+            Platform.runLater (() -> otherMusic.setItems (musicPath));
     }
 
     private void setBtnList (final MFXButton... btns)
@@ -173,148 +425,47 @@ public final class PlayerController implements Initializable
     {
         Main.Launch ("main" , "Player" , (Main.Controller <PlayerController>) (controller , stage) ->
         {
-
+            Main.setPlayerController (controller);
         });
     }
 
-    @FXML
-    public void onClickBtnPlay ()
+    private void next ()
     {
-        Platform.runLater (() ->
+        indexPlay++;
+        if (indexPlay >= musicPath.size ()) indexPlay = 0;
+        play ();
+    }
+
+    private void pre ()
+    {
+        indexPlay--;
+        if (indexPlay >= 0) play ();
+    }
+
+    private void play ()
+    {
+        if (musicPath.size () > 0 && (indexPlay >= 0 && indexPlay < musicPath.size ()))
         {
-            final BardiaPlayer player = new BardiaPlayer ();
+            if (player != null) player.die ();
+            player = new BardiaPlayer ();
 
-            player.SetMusic ("E:\\Saman - Dige Rafte_(Music-o-Movie.ir).mp3" , new On ()
+            player.setMusic (musicPath.get (indexPlay).path , this);
+            player.start ();
+
+            setPlay ();
+        }
+    }
+
+    private void setPlay ()
+    {
+        if (otherMusic.getItems ().size () > 0)
+        {
+            Platform.runLater (() ->
             {
-                @Override
-                public void OnProgress (int i)
-                {
-                    Platform.runLater (() -> sliderPlayer.setValue (i));
-                }
-
-                @Override
-                public void OnMusicTime (ConvertDuration.Time time)
-                {
-                    Platform.runLater (() -> txtMusicTime.setText (time.toString ()));
-                }
-
-                @Override
-                public void OnTime (ConvertDuration.Time time)
-                {
-                    Platform.runLater (() -> txtTime.setText (time.toString ()));
-                }
-
-                @Override
-                public void OnStart ()
-                {
-
-                }
-
-                @Override
-                public void OnStop ()
-                {
-
-                }
-
-                @Override
-                public void OnPause ()
-                {
-
-                }
-
-                @Override
-                public void OnCompleted ()
-                {
-
-                }
-
-                @Override
-                public void OnError (Exception e)
-                {
-
-                }
-
-                @Override
-                public void OnJavaLayerException (JavaLayerException e)
-                {
-
-                }
-
-                @Override
-                public void OnDie ()
-                {
-
-                }
-
-                @Override
-                public void OnName (String s)
-                {
-                    Platform.runLater (() -> txtName.setText (s));
-                }
-
-                @Override
-                public void OnMetadata (ID3v1 id3v1)
-                {
-                    Platform.runLater (() ->
-                    {
-                        txtAlbum.setText (id3v1.getAlbum ());
-                        txtTitle.setText (id3v1.getTitle ());
-                        txtYear.setText (id3v1.getYear ());
-                        txtArtist.setText (id3v1.getArtist ());
-                    });
-                }
-
-                @Override
-                public void OnMetadata (ID3v2 id3v2)
-                {
-                    Platform.runLater (() ->
-                    {
-                        txtAlbum.setText (id3v2.getAlbum ());
-                        txtTitle.setText (id3v2.getTitle ());
-                        txtYear.setText (id3v2.getYear ());
-                        txtArtist.setText (id3v2.getArtist ());
-                    });
-                }
-
-                @Override
-                public void OnMetadataError ()
-                {
-
-                }
-
-                @Override
-                public void OnAlbumImage (InputStream inputStream)
-                {
-                    musicImage.setImage (new Image (inputStream));
-                }
-
-                @Override
-                public void OnAlbumImageError ()
-                {
-
-                }
-
-                @Override
-                public void OnCompleteInfo ()
-                {
-
-                }
+                otherMusic.getSelectionModel ().select (indexPlay);
+                otherMusic.scrollTo (indexPlay);
             });
-
-            player.Start ();
-        });
-    }
-
-    @FXML
-    public void onClickBtnPre ()
-    {
-
-    }
-
-    @FXML
-    public void onClickBtnNext ()
-    {
-
+        }
     }
 
     @FXML
@@ -323,19 +474,18 @@ public final class PlayerController implements Initializable
         panes = Panes.play_list;
         new Thread (() -> Platform.runLater (() ->
         {
-            playerPane.getChildren ().clear ();
+            main.getChildren ().clear ();
             final FXMLLoader playList = Main.GetFXMLLoader ("PlayList/play_list");
             try
             {
                 playList.load ();
                 final PlayListController playListController = playList.getController ();
-                playerPane.getChildren ().add (playListController.mainLayout);
+                main.getChildren ().add (playListController.mainLayout);
             }
             catch (IOException ignored)
             {
             }
         })).start ();
-
     }
 
     @FXML
@@ -365,30 +515,65 @@ public final class PlayerController implements Initializable
     @FXML
     public void onClickBtnPlayer ()
     {
-
+        loadPlayer ();
     }
 
     private double otherMouseX;
 
-    @FXML
-    public void onClickMouseDraggedOtherMusic (final MouseEvent mouseEvent)
+    public void setMusicPath (final List <PathMusic> path)
     {
-        if (otherMusic.getItems ().size () > 0 && !otherMusic.isHideScrollBars ())
+        if (path != null && path.size () > 0)
         {
-            if (otherMouseX > mouseEvent.getX ()) otherMusic.getFocusModel ().focusPrevious ();
-            else if (otherMouseX < mouseEvent.getX ()) otherMusic.getFocusModel ().focusNext ();
-
-            otherMouseX = mouseEvent.getX ();
-
-            Platform.runLater (() -> otherMusic.scrollTo (otherMusic.getFocusModel ().getFocusedIndex ()));
+            musicPath.clear ();
+            musicPath.addAll (path);
+            setMusic ();
         }
     }
 
-    @FXML
-    public void onClickMousePressedOtherMusic (final MouseEvent mouseEvent)
+    private void setMusic ()
     {
-        if (otherMusic.getItems ().size () > 0 && !otherMusic.isHideScrollBars ())
-            otherMouseX = mouseEvent.getX ();
+        indexPlay = 0;
+        play ();
+        setOtherMusic ();
     }
 
+    public final static class PathMusic extends Musics
+    {
+        public final long id;
+        public final String path;
+
+        public PathMusic (final String MusicPath , final long id , final String path)
+        {
+            super (MusicPath);
+            this.id = id;
+            this.path = path;
+        }
+
+        public String getPath ()
+        {
+            return path;
+        }
+
+
+        @Override
+        public String toString ()
+        {
+            return FilenameUtils.getBaseName (path);
+        }
+    }
+
+
+    @FXML
+    public void onClickOtherMusics ()
+    {
+        if (otherMusic.getItems ().size () > 0)
+        {
+            final int selectedIndex = otherMusic.getSelectionModel ().getSelectedIndex ();
+            if (selectedIndex >= 0)
+            {
+                indexPlay = selectedIndex;
+                play ();
+            }
+        }
+    }
 }

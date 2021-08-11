@@ -19,9 +19,9 @@
         <Text fx:id="txtTitle" fill="WHITE" layoutX="286.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="information-music" text="TITLE" wrappingWidth="548.13671875" />
         <Text fx:id="txtYear" fill="WHITE" layoutX="286.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="information-music" text="YEAR" wrappingWidth="548.13671875" />
         <Text fx:id="txtArtist" fill="WHITE" layoutX="286.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="information-music" text="ARTIST" wrappingWidth="548.13671875" />
-        <VBox id="bcolor" layoutX="4.0" layoutY="228.0" prefHeight="195.0" prefWidth="828.0" style="-fx-background-color: #FFF;">
+        <VBox id="bcolor" layoutX="4.0" layoutY="239.0" prefHeight="170.0" prefWidth="828.0" style="-fx-background-color: #FFF;">
             <children>
-                <MFXListView id="other-music" fx:id="otherMusic" onMouseDragged="#onClickMouseDraggedOtherMusic" onMousePressed="#onClickMousePressedOtherMusic" prefHeight="198.0" prefWidth="829.0" />
+                <MFXListView id="other-music" fx:id="otherMusic" onMouseClicked="#onClickOtherMusics" prefHeight="172.0" prefWidth="830.0" />
             </children>
         </VBox>
     </children>

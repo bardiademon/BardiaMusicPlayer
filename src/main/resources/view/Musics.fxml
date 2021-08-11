@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXListView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane id="main-layout" fx:id="playerPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@../style/Musics.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MFXListView id="musics" layoutX="9.0" layoutY="10.0" prefHeight="381.0" prefWidth="584.0" />
+   </children>
+</AnchorPane>

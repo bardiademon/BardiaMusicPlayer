@@ -4,7 +4,6 @@ import com.bardiademon.BardiaMusicPlayer.Main;
 import com.bardiademon.BardiaMusicPlayer.bardiademon.Log;
 import com.bardiademon.BardiaMusicPlayer.bardiademon.Path;
 import com.bardiademon.BardiaMusicPlayer.bardiademon.ShowMessage;
-import com.bardiademon.BardiaMusicPlayer.controllers.PlayList.MusicsController;
 import com.bardiademon.BardiaMusicPlayer.controllers.PlayList.NewPlayListController;
 import com.bardiademon.BardiaMusicPlayer.models.PlayList.PlayList;
 import com.bardiademon.BardiaMusicPlayer.models.PlayList.PlayListNames;
@@ -39,6 +38,9 @@ public final class PlayListController implements Initializable
     @FXML
     public MFXButton btnAddMusic;
 
+    @FXML
+    public MFXButton btnPlay;
+
     private List <PlayListNames> allNames;
 
     @FXML
@@ -67,11 +69,11 @@ public final class PlayListController implements Initializable
     @Override
     public void initialize (final URL url , final ResourceBundle resourceBundle)
     {
-        Platform.runLater (() -> listMusics.setCellFactory (musicsListView -> new MusicsController ()));
-
-        playListName.setOnMouseClicked (mouseEvent -> onClickPlayListName ());
-
-        playListRefresh ();
+        Platform.runLater (() ->
+        {
+            playListName.setOnMouseClicked (mouseEvent -> onClickPlayListName ());
+            playListRefresh ();
+        });
     }
 
     private void playListRefresh ()
@@ -87,6 +89,7 @@ public final class PlayListController implements Initializable
                 btnAddMusic.setDisable (true);
                 btnDeleteMusic.setDisable (true);
                 btnRemovePlayList.setDisable (true);
+                btnPlay.setDisable (true);
             });
 
             musics.clear ();
@@ -160,52 +163,58 @@ public final class PlayListController implements Initializable
     @FXML
     public void onClickBtnRemovePlayList ()
     {
-        if (selectedName >= 0)
+        new Thread (() ->
         {
-            final PlayListNames playListNames = allNames.get (selectedName);
-            Platform.runLater (() ->
+            if (selectedName >= 0)
             {
-                btnRemovePlayList.setDisable (true);
-                final URL url = Main.GetResource (Path.NPL_WAITING);
-                if (url != null)
+                final PlayListNames playListNames = allNames.get (selectedName);
+                Platform.runLater (() ->
                 {
-                    try
+                    btnRemovePlayList.setDisable (true);
+                    final URL url = Main.GetResource (Path.NPL_WAITING);
+                    if (url != null)
                     {
-                        imgBtnRemovePlayList.setImage (new Image (url.openStream ()));
+                        try
+                        {
+                            imgBtnRemovePlayList.setImage (new Image (url.openStream ()));
+                        }
+                        catch (IOException e)
+                        {
+                            Log.N (e);
+                        }
                     }
-                    catch (IOException e)
-                    {
-                        Log.N (e);
-                    }
-                }
-                btnRemovePlayList.setText ("Removing...");
-            });
-            for (final PlayList playList : playListNames.getPlayLists ())
-                if (playList.getMusics () != null) Main.getMusicsService ().delMusic (playList.getMusics ().getId ());
-
-            Main.getPlayListService ().delPlayListName (allNames.get (selectedName).getId ());
-
-            allNames.remove (selectedName);
-            Platform.runLater (() -> playListName.getItems ().remove (selectedName));
-
-            Platform.runLater (() ->
-            {
-                btnRemovePlayList.setDisable (false);
-                final URL url = Main.GetResource (Path.PLI_REMOVE_LIST);
-                if (url != null)
+                    btnRemovePlayList.setText ("Removing...");
+                });
+                for (final PlayList playList : playListNames.getPlayLists ())
                 {
-                    try
-                    {
-                        imgBtnRemovePlayList.setImage (new Image (url.openStream ()));
-                    }
-                    catch (IOException e)
-                    {
-                        Log.N (e);
-                    }
+                    if (playList.getMusics () != null)
+                        Main.getMusicsService ().delMusic (playList.getMusics ().getId ());
                 }
-                btnRemovePlayList.setText ("Remove play list");
-            });
-        }
+
+                Main.getPlayListService ().delPlayListName (allNames.get (selectedName).getId ());
+
+                allNames.remove (selectedName);
+                Platform.runLater (() -> playListName.getItems ().remove (selectedName));
+
+                Platform.runLater (() ->
+                {
+                    btnRemovePlayList.setDisable (false);
+                    final URL url = Main.GetResource (Path.PLI_REMOVE_LIST);
+                    if (url != null)
+                    {
+                        try
+                        {
+                            imgBtnRemovePlayList.setImage (new Image (url.openStream ()));
+                        }
+                        catch (IOException e)
+                        {
+                            Log.N (e);
+                        }
+                    }
+                    btnRemovePlayList.setText ("Remove play list");
+                });
+            }
+        }).start ();
     }
 
     @FXML
@@ -216,7 +225,11 @@ public final class PlayListController implements Initializable
             Platform.runLater (() -> btnRemovePlayList.setDisable (false));
 
             final PlayListNames playListNames = allNames.get (selectedName);
-            if (playListNames != null) setMusics (playListNames.getPlayLists ());
+            if (playListNames != null)
+            {
+                Platform.runLater (() -> btnPlay.setDisable (false));
+                setMusics (playListNames.getPlayLists ());
+            }
         }
     }
 
@@ -236,6 +249,31 @@ public final class PlayListController implements Initializable
             music.setId (playList.getMusics ().getId ());
             musics.add (music);
             Platform.runLater (() -> listMusics.getItems ().add (music));
+        }
+    }
+
+    @FXML
+    public void onClickBtnPlay ()
+    {
+        if (musics.size () > 0)
+        {
+            final List <PlayerController.PathMusic> pathMusics = new ArrayList <> ();
+            final List <PlayList> playLists = allNames.get (selectedName).getPlayLists ();
+            for (int i = 0, len = playLists.size (); i < len; i++)
+            {
+                PlayList playList = playLists.get (i);
+                com.bardiademon.BardiaMusicPlayer.models.Musics.Musics playListMusics = playList.getMusics ();
+                if (playListMusics != null)
+                {
+                    final PlayerController.PathMusic pathMusic = new PlayerController.PathMusic (playListMusics.getPath () , playListMusics.getId () , playListMusics.getPath ());
+                    final Musics music = this.musics.get (i);
+                    pathMusic.setAlbum (music.getAlbum ());
+                    pathMusic.setTitle (music.getTitle ());
+                    pathMusic.setAlbumImage (music.getAlbumImage ());
+                    pathMusics.add (pathMusic);
+                }
+            }
+            if (pathMusics.size () > 0) Main.getPlayerController ().setMusicPath (pathMusics);
         }
     }
 }

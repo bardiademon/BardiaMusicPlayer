@@ -12,38 +12,14 @@
     <children>
         <AnchorPane id="control" layoutY="467.0" prefHeight="59.0" prefWidth="1052.0">
          <children>
-            <ImageView fx:id="btnPlay" fitHeight="20.0" fitWidth="20.0" layoutX="63.0" layoutY="22.0" onMouseClicked="#onClickBtnPlay" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/player/player-play.png" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </ImageView>
-            <ImageView fitHeight="15.0" fitWidth="15.0" layoutX="14.0" layoutY="24.0" onMouseClicked="#onClickBtnPre" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/player/player-pre.png" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </ImageView>
-            <ImageView fitHeight="15.0" fitWidth="15.0" layoutX="120.0" layoutY="24.0" onMouseClicked="#onClickBtnNext" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/player/player-next.png" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </ImageView>
-            <Text fx:id="txtTime" fill="WHITE" layoutX="161.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00:00:00" />
+            <Text fx:id="txtTime" fill="WHITE" layoutX="218.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00:00:00" />
             <Text fx:id="txtMusicTime" fill="WHITE" layoutX="815.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00:00:00" />
-            <MFXSlider fx:id="sliderPlayer" layoutX="222.0" layoutY="28.0" prefHeight="8.0" prefWidth="580.0" value="20.0">
+            <MFXSlider fx:id="sliderPlayer" layoutX="291.0" layoutY="28.0" onMousePressed="#onPressedSliderPlayer" onMouseReleased="#onClickReleasedPlayer" prefHeight="6.0" prefWidth="511.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </MFXSlider>
-            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="886.0" layoutY="21.0" onMouseClicked="#onClickBtnNext" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="886.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/player/player-volume.png" />
                </image>
@@ -51,7 +27,34 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <MFXSlider layoutX="926.0" layoutY="28.0" prefHeight="6.0" prefWidth="107.0" />
+            <MFXSlider fx:id="sliderVolume" bidirectional="false" layoutX="926.0" layoutY="28.0" max="20.0" min="-80.0" onMouseReleased="#onMouseReleasedVolume" prefHeight="6.0" prefWidth="107.0" />
+            <MFXButton fx:id="btnControlPre" layoutY="18.0" onAction="#onClickBtnControlPre" prefHeight="16.0" prefWidth="67.0" styleClass="btn-control" text="Pre" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="17.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/player/player-pre.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
+            <MFXButton fx:id="btnControlPlay" layoutX="67.0" layoutY="17.0" onAction="#onClickBtnControlPlay" prefHeight="16.0" prefWidth="67.0" styleClass="btn-control" text="Play" textFill="WHITE">
+               <graphic>
+                  <ImageView fx:id="imgBtnControlPlay" fitHeight="18.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/player/player-pause.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
+            <MFXButton fx:id="btnControlNext" layoutX="134.0" layoutY="19.0" onAction="#onClickBtnControlNext" prefHeight="16.0" prefWidth="67.0" styleClass="btn-control" text="Next" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/player/player-next.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
          </children></AnchorPane>
       <AnchorPane id="control" layoutY="9.0" prefHeight="443.0" prefWidth="200.0">
          <children>

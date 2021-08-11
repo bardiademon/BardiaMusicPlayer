@@ -6,11 +6,17 @@ import com.bardiademon.MusicPlayer.OnInfo;
 import com.bardiademon.MusicPlayer.bardiademon.ConvertDuration;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
+import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import org.apache.commons.io.FilenameUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.CountDownLatch;
 
-public final class Musics
+public class Musics
 {
     private long id;
 
@@ -18,67 +24,11 @@ public final class Musics
 
     private byte[] albumImage;
 
+    private String path;
+
     public Musics (final String MusicPath)
     {
-        (new BardiaPlayer ()).onInfo (MusicPath , new OnInfo ()
-        {
-            @Override
-            public void OnMusicTime (ConvertDuration.Time time)
-            {
-
-            }
-
-            @Override
-            public void OnName (String s)
-            {
-
-            }
-
-            @Override
-            public void OnMetadata (ID3v1 id3v1)
-            {
-                setTitle (id3v1.getTitle ());
-                setAlbum (id3v1.getAlbum ());
-            }
-
-            @Override
-            public void OnMetadata (ID3v2 id3v2)
-            {
-                setTitle (id3v2.getTitle ());
-                setAlbum (id3v2.getAlbum ());
-            }
-
-            @Override
-            public void OnMetadataError ()
-            {
-
-            }
-
-            @Override
-            public void OnAlbumImage (final InputStream inputStream)
-            {
-                try
-                {
-                    setAlbumImage (inputStream.readAllBytes ());
-                }
-                catch (final IOException e)
-                {
-                    Log.N (e);
-                }
-            }
-
-            @Override
-            public void OnAlbumImageError ()
-            {
-
-            }
-
-            @Override
-            public void OnCompleteInfo ()
-            {
-
-            }
-        });
+        this.path = MusicPath;
     }
 
     public String getTitle ()
@@ -121,9 +71,14 @@ public final class Musics
         this.id = id;
     }
 
+    public String getPath ()
+    {
+        return path;
+    }
+
     @Override
     public String toString ()
     {
-        return "";
+        return FilenameUtils.getBaseName (getPath ());
     }
 }
