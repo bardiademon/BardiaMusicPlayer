@@ -41,9 +41,16 @@ import java.util.ResourceBundle;
 public final class PlayerController implements Initializable, On
 {
 
+    @FXML
+    public ImageView btnRepeat;
+
+    private Image imgNoRepeat, imgOneRepeat, imgListRepeat;
+
+    private static Repeat repeat = Repeat.list_repeat;
+
     private boolean sliderPlayerBlocked;
 
-    private boolean playMusic;
+    private boolean playMusic, pause;
 
     @FXML
     public MFXButton btnControlNext;
@@ -263,7 +270,14 @@ public final class PlayerController implements Initializable, On
     @Override
     public void onCompleted ()
     {
-        next ();
+        Platform.runLater (() ->
+        {
+            sliderPlayer.setValue (0);
+            txtTime.setText ("00:00:00");
+        });
+
+        if (repeat.equals (Repeat.list_repeat)) next ();
+        else if (repeat.equals (Repeat.one_repeat)) play ();
     }
 
     @Override
@@ -323,6 +337,46 @@ public final class PlayerController implements Initializable, On
         sliderPlayerBlocked = false;
     }
 
+    @FXML
+    public void onClickBtnRepeat ()
+    {
+        if (repeat.equals (Repeat.list_repeat))
+        {
+            repeat = Repeat.one_repeat;
+            if (imgOneRepeat == null) imgOneRepeat = getImage (Path.R_PR_ONE_REPEAT);
+            if (imgOneRepeat != null) btnRepeat.setImage (imgOneRepeat);
+        }
+        else if (repeat.equals (Repeat.one_repeat))
+        {
+            repeat = Repeat.no_repeat;
+            if (imgNoRepeat == null) imgNoRepeat = getImage (Path.R_PR_NO_REPEAT);
+            if (imgNoRepeat != null) btnRepeat.setImage (imgNoRepeat);
+        }
+        else if (repeat.equals (Repeat.no_repeat))
+        {
+            repeat = Repeat.list_repeat;
+            if (imgListRepeat == null) imgListRepeat = getImage (Path.R_PR_LIST_REPEAT);
+            if (imgListRepeat != null) btnRepeat.setImage (imgListRepeat);
+        }
+    }
+
+    private Image getImage (final String path)
+    {
+        final URL urlOneRepeat = Main.GetResource (path);
+        if (urlOneRepeat != null)
+        {
+            try
+            {
+                return new Image (urlOneRepeat.openStream ());
+            }
+            catch (final IOException e)
+            {
+                Log.N (e);
+            }
+        }
+
+        return null;
+    }
 
     private enum Panes
     {
@@ -530,7 +584,11 @@ public final class PlayerController implements Initializable, On
     @FXML
     public void onClickBtnPlayedMusic ()
     {
-
+        if (player != null)
+        {
+            if (player.isStop ()) play ();
+            else player.pause ();
+        }
     }
 
     @FXML
@@ -596,5 +654,10 @@ public final class PlayerController implements Initializable, On
                 play ();
             }
         }
+    }
+
+    private enum Repeat
+    {
+        no_repeat, one_repeat, list_repeat
     }
 }

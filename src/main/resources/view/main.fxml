@@ -14,12 +14,12 @@
          <children>
             <Text fx:id="txtTime" fill="WHITE" layoutX="218.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00:00:00" />
             <Text fx:id="txtMusicTime" fill="WHITE" layoutX="815.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00:00:00" />
-            <MFXSlider fx:id="sliderPlayer" layoutX="291.0" layoutY="28.0" onMousePressed="#onPressedSliderPlayer" onMouseReleased="#onClickReleasedPlayer" prefHeight="6.0" prefWidth="511.0">
+            <MFXSlider fx:id="sliderPlayer" layoutX="282.0" layoutY="28.0" onMousePressed="#onPressedSliderPlayer" onMouseReleased="#onClickReleasedPlayer" prefHeight="6.0" prefWidth="520.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </MFXSlider>
-            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="886.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="16.0" fitWidth="15.0" layoutX="943.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/player/player-volume.png" />
                </image>
@@ -27,7 +27,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <MFXSlider fx:id="sliderVolume" bidirectional="false" layoutX="926.0" layoutY="28.0" max="20.0" min="-80.0" onMouseReleased="#onMouseReleasedVolume" prefHeight="6.0" prefWidth="107.0" />
+            <MFXSlider fx:id="sliderVolume" bidirectional="false" layoutX="971.0" layoutY="29.0" max="20.0" min="-80.0" onMouseReleased="#onMouseReleasedVolume" prefHeight="6.0" prefWidth="67.0" />
             <MFXButton fx:id="btnControlPre" layoutY="18.0" onAction="#onClickBtnControlPre" prefHeight="16.0" prefWidth="67.0" styleClass="btn-control" text="Pre" textFill="WHITE">
                <graphic>
                   <ImageView fitHeight="17.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
@@ -55,6 +55,16 @@
                   </ImageView>
                </graphic>
             </MFXButton>
+            <ImageView fx:id="btnRepeat" fitHeight="25.0" fitWidth="29.0" layoutX="874.0" layoutY="18.0" onMouseClicked="#onClickBtnRepeat" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/player/Repeat/list-repeat.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="btnLike" fitHeight="25.0" fitWidth="25.0" layoutX="907.0" layoutY="18.0" onMouseClicked="#onClickBtnLike" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/player/Like/not-like.png" />
+               </image>
+            </ImageView>
          </children></AnchorPane>
       <AnchorPane id="control" layoutY="9.0" prefHeight="443.0" prefWidth="200.0">
          <children>
