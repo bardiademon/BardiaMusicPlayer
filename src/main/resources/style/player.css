@@ -31,6 +31,11 @@
     -fx-letter-spacing: 5px;
 }
 
+#img-btn-list
+{
+    -fx-effect: dropshadow(gaussian, rgb(0, 0, 0), 0, 0, 0, 0);
+}
+
 .list-view .list-cell
 {
     -fx-background-color: #1b1c22;
@@ -42,6 +47,7 @@
     -fx-background-color: #5c5e68;
 }
 
-.list-view{
+.list-view
+{
     -fx-margin: 10px;
 }

@@ -60,9 +60,9 @@
                   <Image url="@../images/player/Repeat/list-repeat.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="btnLike" fitHeight="25.0" fitWidth="25.0" layoutX="907.0" layoutY="18.0" onMouseClicked="#onClickBtnLike" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="btnFavourites" fitHeight="25.0" fitWidth="25.0" layoutX="907.0" layoutY="18.0" onMouseClicked="#onClickBtnFavourites" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/player/Like/not-like.png" />
+                  <Image url="@../images/player/Favourites/not-favourites.png" />
                </image>
             </ImageView>
          </children></AnchorPane>
@@ -78,7 +78,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </MFXButton>
-            <MFXButton id="btn-list" fx:id="btnFavourites" alignment="TOP_LEFT" layoutX="14.0" layoutY="185.0" onAction="#onClickBtnFavourites" prefHeight="25.0" prefWidth="172.0" text="F a v o u r i t e s">
+            <MFXButton id="btn-list" fx:id="btnLstFavourites" alignment="TOP_LEFT" layoutX="14.0" layoutY="185.0" onAction="#onClickBtnLstFavourites" prefHeight="25.0" prefWidth="172.0" text="F a v o u r i t e s">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -93,10 +93,17 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </MFXButton>
-            <MFXButton id="btn-list" fx:id="btnPlayer" alignment="TOP_LEFT" layoutX="15.0" layoutY="14.0" onAction="#onClickBtnPlayer" prefHeight="25.0" prefWidth="172.0" text="P L A Y E R">
+            <MFXButton id="btn-list" fx:id="btnPlayer" alignment="TOP_LEFT" layoutX="15.0" layoutY="14.0" onAction="#onClickBtnPlayer" prefHeight="27.0" prefWidth="172.0" text="P L A Y E R">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
+               <graphic>
+                  <ImageView fitHeight="17.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" styleClass="img-btn-list">
+                     <image>
+                        <Image url="@../images/list-player.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </MFXButton>
          </children>
       </AnchorPane>

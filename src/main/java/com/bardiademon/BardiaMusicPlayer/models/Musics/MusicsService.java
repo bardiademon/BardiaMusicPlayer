@@ -11,8 +11,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public final class MusicsService
 {
@@ -40,6 +38,36 @@ public final class MusicsService
                     {
                         final Musics musics = new Musics ();
                         musics.setId (musicId);
+                        musics.setPath (resultSet.getString (ColumnsNames.path.name ()));
+                        musics.setAddedAt (resultSet.getTimestamp (ColumnsNames.added_at.name ()).toLocalDateTime ());
+
+                        return musics;
+                    }
+                }
+            }
+            catch (final SQLException e)
+            {
+                Log.N (e);
+            }
+        }
+        else Log.N (Log.DATABASE_NOT_CONNECTED);
+
+        return null;
+    }
+
+    public Musics getMusic (final String musicPath)
+    {
+        if (Main.getDatabase ().connected ())
+        {
+            try (final PreparedStatement statement = (Main.getDatabase ().getConnection ()).prepareStatement (makeQueryGetMusicFromPath () , ResultSet.TYPE_FORWARD_ONLY , ResultSet.CONCUR_READ_ONLY))
+            {
+                statement.setString (1 , musicPath);
+                try (final ResultSet resultSet = statement.executeQuery ())
+                {
+                    if (resultSet.next ())
+                    {
+                        final Musics musics = new Musics ();
+                        musics.setId (resultSet.getLong (ColumnsNames.id.name ()));
                         musics.setPath (resultSet.getString (ColumnsNames.path.name ()));
                         musics.setAddedAt (resultSet.getTimestamp (ColumnsNames.added_at.name ()).toLocalDateTime ());
 
@@ -141,6 +169,11 @@ public final class MusicsService
     private String makeQueryGetMusic ()
     {
         return (String.format ("select * from \"%s\" where \"%s\" = ?" , TBNAME , ColumnsNames.id));
+    }
+
+    private String makeQueryGetMusicFromPath ()
+    {
+        return (String.format ("select * from \"%s\" where \"%s\" = ?" , TBNAME , ColumnsNames.path));
     }
 
     private String makeQueryGetMusics ()

@@ -26,10 +26,10 @@ public final class Path
             R_PR_ONE_REPEAT = Get (R_P_REPEAT , "one-repeat.png"),
             R_PR_LIST_REPEAT = Get (R_P_REPEAT , "list-repeat.png"),
 
-    // R => Resource , PL => Player Like
-    R_PL = Get (R_PLAYER , "Like"),
-            R_PL_LIKE = Get (R_PL , "like.png"),
-            R_PL_NOT_LIKE = Get (R_PL , "not-like.png"),
+    // R => Resource , PF => Player favourites
+    R_PF = Get (R_PLAYER , "Favourites"),
+            R_PF_LIKE = Get (R_PF , "favourites.png"),
+            R_PF_NOT_LIKE = Get (R_PF , "not-favourites.png"),
 
     // NPL => New Play List
     NPL_WAITING = Get (R_NEW_PLAY_LIST , "Waiting.gif"), NPL_COMPLETED = Get (R_NEW_PLAY_LIST , "Completed.png"),

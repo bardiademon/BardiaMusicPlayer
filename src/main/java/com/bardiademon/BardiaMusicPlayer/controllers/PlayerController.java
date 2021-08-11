@@ -4,6 +4,7 @@ import com.bardiademon.BardiaJlayer.javazoom.jl.decoder.JavaLayerException;
 import com.bardiademon.BardiaMusicPlayer.Main;
 import com.bardiademon.BardiaMusicPlayer.bardiademon.Log;
 import com.bardiademon.BardiaMusicPlayer.bardiademon.Path;
+import com.bardiademon.BardiaMusicPlayer.models.Favourites.FavouritesService;
 import com.bardiademon.MusicPlayer.BardiaPlayer;
 import com.bardiademon.MusicPlayer.On;
 import com.bardiademon.MusicPlayer.bardiademon.ConvertDuration;
@@ -44,13 +45,16 @@ public final class PlayerController implements Initializable, On
     @FXML
     public ImageView btnRepeat;
 
+    @FXML
+    public ImageView btnFavourites;
+
     private Image imgNoRepeat, imgOneRepeat, imgListRepeat;
 
     private static Repeat repeat = Repeat.list_repeat;
 
     private boolean sliderPlayerBlocked;
 
-    private boolean playMusic, pause;
+    private boolean playMusic;
 
     @FXML
     public MFXButton btnControlNext;
@@ -84,7 +88,7 @@ public final class PlayerController implements Initializable, On
     public MFXButton btnMusics;
 
     @FXML
-    public MFXButton btnFavourites;
+    public MFXButton btnLstFavourites;
 
     @FXML
     public MFXButton btnSelectedMusic;
@@ -128,6 +132,8 @@ public final class PlayerController implements Initializable, On
     public AnchorPane main, playerPane;
 
     private Panes panes;
+
+    private String musicPlaying;
 
     @Override
     public void onProgress (int i)
@@ -242,6 +248,8 @@ public final class PlayerController implements Initializable, On
             imgBtnControlPlay.setImage (imgPlay);
             btnControlPlay.setText ("Pause");
         });
+
+        setImageBtnFavouritesOrNot ();
     }
 
     @Override
@@ -281,13 +289,13 @@ public final class PlayerController implements Initializable, On
     }
 
     @Override
-    public void onError (Exception e)
+    public void onError (final Exception e)
     {
-        next ();
+        Log.N (e);
     }
 
     @Override
-    public void onJavaLayerException (JavaLayerException e)
+    public void onJavaLayerException (final JavaLayerException e)
     {
         next ();
     }
@@ -307,6 +315,7 @@ public final class PlayerController implements Initializable, On
     @FXML
     public void onClickBtnControlPlay ()
     {
+        if (player != null) player.pause ();
     }
 
     @FXML
@@ -378,6 +387,17 @@ public final class PlayerController implements Initializable, On
         return null;
     }
 
+    @FXML
+    public void onClickBtnFavourites ()
+    {
+        final FavouritesService.ResultAddOrRemove resultAddOrRemove = Main.getFavouritesService ().addOrRemove (musicPlaying);
+        if (resultAddOrRemove != null)
+        {
+            if (resultAddOrRemove.equals (FavouritesService.ResultAddOrRemove.add)) setImageBtnFavourites ();
+            else setImageBtnNotFavourites ();
+        }
+    }
+
     private enum Panes
     {
         player, play_list, musics
@@ -413,7 +433,7 @@ public final class PlayerController implements Initializable, On
         }
 
 
-        setBtnList (btnPlayList , btnMusics , btnFavourites , btnSelectedMusic , btnPlayedMusic , btnPlayer);
+        setBtnList (btnPlayList , btnMusics , btnLstFavourites , btnSelectedMusic , btnPlayedMusic , btnPlayer);
         if (panes == null || !panes.equals (Panes.player))
         {
             loadPlayer ();
@@ -473,10 +493,7 @@ public final class PlayerController implements Initializable, On
 
     public static void Launch ()
     {
-        Main.Launch ("main" , "Player" , (Main.Controller <PlayerController>) (controller , stage) ->
-        {
-            Main.setPlayerController (controller);
-        });
+        Main.Launch ("main" , "Player" , (Main.Controller <PlayerController>) (controller , stage) -> Main.setPlayerController (controller));
     }
 
     private void next ()
@@ -504,6 +521,9 @@ public final class PlayerController implements Initializable, On
         player = new BardiaPlayer ();
 
         player.setMusic (path , this);
+
+        musicPlaying = path;
+
         player.start ();
 
         setPlay ();
@@ -570,9 +590,25 @@ public final class PlayerController implements Initializable, On
     }
 
     @FXML
-    public void onClickBtnFavourites ()
+    public void onClickBtnLstFavourites ()
     {
 
+    }
+
+    private void setImageBtnFavouritesOrNot ()
+    {
+        if (Main.getFavouritesService ().has (musicPlaying)) setImageBtnFavourites ();
+        else setImageBtnNotFavourites ();
+    }
+
+    private void setImageBtnNotFavourites ()
+    {
+        Platform.runLater (() -> btnFavourites.setImage (getImage (Path.R_PF_NOT_LIKE)));
+    }
+
+    private void setImageBtnFavourites ()
+    {
+        Platform.runLater (() -> btnFavourites.setImage (getImage (Path.R_PF_LIKE)));
     }
 
     @FXML
@@ -584,11 +620,7 @@ public final class PlayerController implements Initializable, On
     @FXML
     public void onClickBtnPlayedMusic ()
     {
-        if (player != null)
-        {
-            if (player.isStop ()) play ();
-            else player.pause ();
-        }
+
     }
 
     @FXML
@@ -596,8 +628,6 @@ public final class PlayerController implements Initializable, On
     {
         loadPlayer ();
     }
-
-    private double otherMouseX;
 
     public void setMusicPath (final List <PathMusic> path)
     {

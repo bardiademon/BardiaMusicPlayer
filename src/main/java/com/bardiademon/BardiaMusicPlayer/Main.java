@@ -3,6 +3,7 @@ package com.bardiademon.BardiaMusicPlayer;
 import com.bardiademon.BardiaMusicPlayer.bardiademon.Log;
 import com.bardiademon.BardiaMusicPlayer.controllers.PlayerController;
 import com.bardiademon.BardiaMusicPlayer.models.Database;
+import com.bardiademon.BardiaMusicPlayer.models.Favourites.FavouritesService;
 import com.bardiademon.BardiaMusicPlayer.models.Musics.MusicsService;
 import com.bardiademon.BardiaMusicPlayer.models.PlayList.PlayListService;
 import javafx.application.Application;
@@ -24,6 +25,7 @@ public final class Main extends Application
 
     private static final MusicsService MUSICS_SERVICE = new MusicsService ();
     private static final PlayListService PLAY_LIST_SERVICE = new PlayListService ();
+    private static final FavouritesService FAVOURITES_SERVICE = new FavouritesService ();
 
     private static PlayerController playerController;
 
@@ -174,5 +176,10 @@ public final class Main extends Application
     public static Stage getStage ()
     {
         return stage;
+    }
+
+    public static FavouritesService getFavouritesService ()
+    {
+        return FAVOURITES_SERVICE;
     }
 }
