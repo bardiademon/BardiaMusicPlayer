@@ -1,4 +1,9 @@
-#main-layout
+#main-layout, #musics
 {
     -fx-background-color: #1b1c22;
+}
+
+#musics
+{
+    -fx-text-fill: #fff;
 }

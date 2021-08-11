@@ -2,6 +2,8 @@ package com.bardiademon.BardiaMusicPlayer.models.Musics;
 
 import com.bardiademon.BardiaMusicPlayer.Main;
 import com.bardiademon.BardiaMusicPlayer.bardiademon.Log;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +11,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class MusicsService
 {
@@ -41,6 +45,37 @@ public final class MusicsService
 
                         return musics;
                     }
+                }
+            }
+            catch (final SQLException e)
+            {
+                Log.N (e);
+            }
+        }
+        else Log.N (Log.DATABASE_NOT_CONNECTED);
+
+        return null;
+    }
+
+    public ObservableList <Musics> getMusics ()
+    {
+        if (Main.getDatabase ().connected ())
+        {
+            try (final Statement statement = (Main.getDatabase ().getConnection ()).createStatement (ResultSet.TYPE_FORWARD_ONLY , ResultSet.CONCUR_READ_ONLY))
+            {
+                try (final ResultSet resultSet = statement.executeQuery (makeQueryGetMusics ()))
+                {
+                    final ObservableList <Musics> musics = FXCollections.observableArrayList ();
+                    while (resultSet.next ())
+                    {
+                        final Musics music = new Musics ();
+                        music.setId (resultSet.getLong (ColumnsNames.id.name ()));
+                        music.setPath (resultSet.getString (ColumnsNames.path.name ()));
+                        music.setAddedAt (resultSet.getTimestamp (ColumnsNames.added_at.name ()).toLocalDateTime ());
+
+                        musics.add (music);
+                    }
+                    return musics;
                 }
             }
             catch (final SQLException e)
@@ -106,6 +141,11 @@ public final class MusicsService
     private String makeQueryGetMusic ()
     {
         return (String.format ("select * from \"%s\" where \"%s\" = ?" , TBNAME , ColumnsNames.id));
+    }
+
+    private String makeQueryGetMusics ()
+    {
+        return (String.format ("select * from \"%s\"" , TBNAME));
     }
 
     private String makeQueryAddMusic ()

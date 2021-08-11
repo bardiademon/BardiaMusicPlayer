@@ -3,9 +3,11 @@
 <?import io.github.palexdev.materialfx.controls.MFXListView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane id="main-layout" fx:id="playerPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@../style/Musics.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <MFXListView id="musics" layoutX="9.0" layoutY="10.0" prefHeight="381.0" prefWidth="584.0" />
-   </children>
+<AnchorPane id="main-layout" fx:id="mainLayout" prefHeight="400.0" prefWidth="600.0"
+            fx:controller="com.bardiademon.BardiaMusicPlayer.controllers.MusicsController"
+            stylesheets="@../style/Musics.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <MFXListView id="musics" fx:id="musics" layoutX="1.0" onMouseClicked="#onClickMusics" prefHeight="400.0"
+                     prefWidth="830.0" />
+    </children>
 </AnchorPane>

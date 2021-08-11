@@ -1,5 +1,7 @@
 package com.bardiademon.BardiaMusicPlayer.models.Musics;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.time.LocalDateTime;
 
 public final class Musics
@@ -40,5 +42,11 @@ public final class Musics
     public void setAddedAt (LocalDateTime addedAt)
     {
         this.addedAt = addedAt;
+    }
+
+    @Override
+    public String toString ()
+    {
+        return FilenameUtils.getBaseName (getPath ());
     }
 }

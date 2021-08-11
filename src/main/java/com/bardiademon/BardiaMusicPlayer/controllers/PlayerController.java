@@ -19,7 +19,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -29,11 +28,8 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import org.apache.commons.io.FilenameUtils;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -330,7 +326,7 @@ public final class PlayerController implements Initializable, On
 
     private enum Panes
     {
-        player, play_list
+        player, play_list, musics
     }
 
     @Override
@@ -380,7 +376,7 @@ public final class PlayerController implements Initializable, On
             {
                 fxmlLoader.setController (PlayerController.this);
                 fxmlLoader.load ();
-          
+
                 otherMusic.setBackground (new Background (new BackgroundFill (Color.BLACK , new CornerRadii (0) , new Insets (0))));
 
                 main.getChildren ().clear ();
@@ -445,15 +441,18 @@ public final class PlayerController implements Initializable, On
     private void play ()
     {
         if (musicPath.size () > 0 && (indexPlay >= 0 && indexPlay < musicPath.size ()))
-        {
-            if (player != null) player.die ();
-            player = new BardiaPlayer ();
+            play (musicPath.get (indexPlay).path);
+    }
 
-            player.setMusic (musicPath.get (indexPlay).path , this);
-            player.start ();
+    public void play (final String path)
+    {
+        if (player != null) player.die ();
+        player = new BardiaPlayer ();
 
-            setPlay ();
-        }
+        player.setMusic (path , this);
+        player.start ();
+
+        setPlay ();
     }
 
     private void setPlay ()
@@ -491,7 +490,29 @@ public final class PlayerController implements Initializable, On
     @FXML
     public void onClickBtnMusics ()
     {
+        if (!panes.equals (Panes.musics))
+        {
+            panes = Panes.musics;
+            Platform.runLater (() ->
+            {
+                final FXMLLoader musics = Main.GetFXMLLoader ("Musics");
+                try
+                {
+                    musics.load ();
 
+                    final MusicsController controller = musics.getController ();
+
+                    main.getChildren ().clear ();
+                    main.getChildren ().add (controller.mainLayout);
+
+                }
+                catch (final IOException e)
+                {
+                    Log.N (e);
+                }
+            });
+
+        }
     }
 
     @FXML
