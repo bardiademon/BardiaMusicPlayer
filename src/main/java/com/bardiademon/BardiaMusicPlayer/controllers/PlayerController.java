@@ -4,6 +4,9 @@ import com.bardiademon.BardiaJlayer.javazoom.jl.decoder.JavaLayerException;
 import com.bardiademon.BardiaMusicPlayer.Main;
 import com.bardiademon.BardiaMusicPlayer.bardiademon.Log;
 import com.bardiademon.BardiaMusicPlayer.bardiademon.Path;
+import com.bardiademon.BardiaMusicPlayer.controllers.List.FavouriteController;
+import com.bardiademon.BardiaMusicPlayer.controllers.List.ListController;
+import com.bardiademon.BardiaMusicPlayer.controllers.List.MusicsController;
 import com.bardiademon.BardiaMusicPlayer.models.Favourites.FavouritesService;
 import com.bardiademon.MusicPlayer.BardiaPlayer;
 import com.bardiademon.MusicPlayer.On;
@@ -400,7 +403,7 @@ public final class PlayerController implements Initializable, On
 
     private enum Panes
     {
-        player, play_list, musics
+        player, play_list, musics, favourites
     }
 
     @Override
@@ -564,34 +567,38 @@ public final class PlayerController implements Initializable, On
     @FXML
     public void onClickBtnMusics ()
     {
-        if (!panes.equals (Panes.musics))
+        loadListPane (Panes.musics , new MusicsController ());
+    }
+
+    @FXML
+    public void onClickBtnLstFavourites ()
+    {
+        loadListPane (Panes.favourites , new FavouriteController ());
+    }
+
+    private void loadListPane (final Panes panes , final ListController controller)
+    {
+        if (!this.panes.equals (panes))
         {
-            panes = Panes.musics;
+            this.panes = panes;
             Platform.runLater (() ->
             {
-                final FXMLLoader musics = Main.GetFXMLLoader ("Musics");
+                final FXMLLoader musics = Main.GetFXMLLoader ("List");
                 try
                 {
-                    musics.load ();
+                    musics.setController (controller);
 
-                    final MusicsController controller = musics.getController ();
+                    musics.load ();
 
                     main.getChildren ().clear ();
                     main.getChildren ().add (controller.mainLayout);
-
                 }
                 catch (final IOException e)
                 {
                     Log.N (e);
                 }
             });
-
         }
-    }
-
-    @FXML
-    public void onClickBtnLstFavourites ()
-    {
 
     }
 

@@ -66,45 +66,68 @@
                </image>
             </ImageView>
          </children></AnchorPane>
-      <AnchorPane id="control" layoutY="9.0" prefHeight="443.0" prefWidth="200.0">
+      <AnchorPane id="control" layoutY="11.0" prefHeight="443.0" prefWidth="200.0">
          <children>
-            <MFXButton id="btn-list" fx:id="btnPlayList" alignment="TOP_LEFT" layoutX="14.0" layoutY="72.0" onAction="#onClickBtnPlayList" prefHeight="25.0" prefWidth="172.0" text="P l a y   l i s t">
+            <MFXButton id="btn-list" fx:id="btnPlayList" alignment="TOP_LEFT" layoutX="43.0" layoutY="72.0" onAction="#onClickBtnPlayList" prefHeight="26.0" prefWidth="143.0" text="P l a y   l i s t">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </MFXButton>
-            <MFXButton id="btn-list" fx:id="btnMusics" alignment="TOP_LEFT" layoutX="14.0" layoutY="131.0" onAction="#onClickBtnMusics" prefHeight="25.0" prefWidth="172.0" text="M u s i c s">
+            <MFXButton id="btn-list" fx:id="btnMusics" alignment="TOP_LEFT" layoutX="43.0" layoutY="131.0" onAction="#onClickBtnMusics" prefHeight="26.0" prefWidth="143.0" text="M u s i c s">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </MFXButton>
-            <MFXButton id="btn-list" fx:id="btnLstFavourites" alignment="TOP_LEFT" layoutX="14.0" layoutY="185.0" onAction="#onClickBtnLstFavourites" prefHeight="25.0" prefWidth="172.0" text="F a v o u r i t e s">
+            <MFXButton id="btn-list" fx:id="btnLstFavourites" alignment="TOP_LEFT" layoutX="43.0" layoutY="185.0" onAction="#onClickBtnLstFavourites" prefHeight="26.0" prefWidth="143.0" text="F a v o u r i t e s">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </MFXButton>
-            <MFXButton id="btn-list" fx:id="btnSelectedMusic" alignment="TOP_LEFT" layoutX="14.0" layoutY="238.0" onAction="#onClickBtnSelectedMusic" prefHeight="25.0" prefWidth="172.0" text="S e l e c t e d  m u s i c s">
+            <MFXButton id="btn-list" fx:id="btnSelectedMusic" alignment="TOP_LEFT" layoutX="43.0" layoutY="238.0" onAction="#onClickBtnSelectedMusic" prefHeight="26.0" prefWidth="143.0" text="S e l e c t e d  m u s i c s">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </MFXButton>
-            <MFXButton id="btn-list" fx:id="btnPlayedMusic" alignment="TOP_LEFT" layoutX="29.0" layoutY="404.0" onAction="#onClickBtnPlayedMusic" prefHeight="25.0" prefWidth="143.0" text="P l a y e d  m u s i c">
+            <MFXButton id="btn-list" fx:id="btnPlayedMusic" alignment="TOP_LEFT" layoutX="49.0" layoutY="404.0" onAction="#onClickBtnPlayedMusic" prefHeight="26.0" prefWidth="143.0" text="P l a y e d  m u s i c">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </MFXButton>
-            <MFXButton id="btn-list" fx:id="btnPlayer" alignment="TOP_LEFT" layoutX="15.0" layoutY="14.0" onAction="#onClickBtnPlayer" prefHeight="27.0" prefWidth="172.0" text="P L A Y E R">
+            <MFXButton id="btn-list" fx:id="btnPlayer" alignment="TOP_LEFT" layoutX="44.0" layoutY="14.0" onAction="#onClickBtnPlayer" prefHeight="27.0" prefWidth="143.0" text="P L A Y E R">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
-               <graphic>
-                  <ImageView fitHeight="17.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" styleClass="img-btn-list">
-                     <image>
-                        <Image url="@../images/list-player.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
             </MFXButton>
+            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="12.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" styleClass="img-btn-list">
+               <image>
+                  <Image url="@../images/list-player.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="12.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true" styleClass="img-btn-list">
+               <image>
+                  <Image url="@../images/list-play-list.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="12.0" layoutY="132.0" pickOnBounds="true" preserveRatio="true" styleClass="img-btn-list">
+               <image>
+                  <Image url="@../images/list-musics.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="12.0" layoutY="186.0" pickOnBounds="true" preserveRatio="true" styleClass="img-btn-list">
+               <image>
+                  <Image url="@../images/list-favourite.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="12.0" layoutY="239.0" pickOnBounds="true" preserveRatio="true" styleClass="img-btn-list">
+               <image>
+                  <Image url="@../images/list-selected-musics.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="12.0" layoutY="405.0" pickOnBounds="true" preserveRatio="true" styleClass="img-btn-list">
+               <image>
+                  <Image url="@../images/list-musics.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="main" layoutX="210.0" layoutY="14.0" prefHeight="437.0" prefWidth="835.0">

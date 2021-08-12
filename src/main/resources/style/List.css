@@ -1,9 +1,9 @@
-#main-layout, #musics
+#main-layout, #list
 {
     -fx-background-color: #1b1c22;
 }
 
-#musics
+#list
 {
     -fx-text-fill: #fff;
 }

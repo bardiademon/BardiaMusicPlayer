@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 
 public final class MusicsService
 {
-    private static final String TBNAME = "musics";
+    public static final String TBNAME = "musics";
 
-    private enum ColumnsNames
+    public enum ColumnsNames
     {
         id, path, added_at
     }
@@ -64,15 +64,7 @@ public final class MusicsService
                 statement.setString (1 , musicPath);
                 try (final ResultSet resultSet = statement.executeQuery ())
                 {
-                    if (resultSet.next ())
-                    {
-                        final Musics musics = new Musics ();
-                        musics.setId (resultSet.getLong (ColumnsNames.id.name ()));
-                        musics.setPath (resultSet.getString (ColumnsNames.path.name ()));
-                        musics.setAddedAt (resultSet.getTimestamp (ColumnsNames.added_at.name ()).toLocalDateTime ());
-
-                        return musics;
-                    }
+                    if (resultSet.next ()) return getMusic (resultSet);
                 }
             }
             catch (final SQLException e)
@@ -94,15 +86,7 @@ public final class MusicsService
                 try (final ResultSet resultSet = statement.executeQuery (makeQueryGetMusics ()))
                 {
                     final ObservableList <Musics> musics = FXCollections.observableArrayList ();
-                    while (resultSet.next ())
-                    {
-                        final Musics music = new Musics ();
-                        music.setId (resultSet.getLong (ColumnsNames.id.name ()));
-                        music.setPath (resultSet.getString (ColumnsNames.path.name ()));
-                        music.setAddedAt (resultSet.getTimestamp (ColumnsNames.added_at.name ()).toLocalDateTime ());
-
-                        musics.add (music);
-                    }
+                    while (resultSet.next ()) musics.add (getMusic (resultSet));
                     return musics;
                 }
             }
@@ -114,6 +98,16 @@ public final class MusicsService
         else Log.N (Log.DATABASE_NOT_CONNECTED);
 
         return null;
+    }
+
+    public Musics getMusic (final ResultSet resultSet) throws SQLException
+    {
+        final Musics music = new Musics ();
+        music.setId (resultSet.getLong (ColumnsNames.id.name ()));
+        music.setPath (resultSet.getString (ColumnsNames.path.name ()));
+        music.setAddedAt (resultSet.getTimestamp (ColumnsNames.added_at.name ()).toLocalDateTime ());
+
+        return music;
     }
 
     public long addMusic (final String path)
