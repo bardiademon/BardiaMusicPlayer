@@ -40,8 +40,6 @@ public class ListController implements Initializable
     @FXML
     public void onClickList (final MouseEvent mouseEvent)
     {
-        System.out.println (mouseEvent.getButton ());
-
         final int selectedIndex = list.getSelectionModel ().getSelectedIndex ();
         if (selectedIndex >= 0)
             Main.getPlayerController ().play (list.getSelectionModel ().getSelectedItem ().getPath ());

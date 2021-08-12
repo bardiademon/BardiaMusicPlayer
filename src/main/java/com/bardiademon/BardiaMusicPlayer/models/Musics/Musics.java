@@ -4,7 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.time.LocalDateTime;
 
-public final class Musics
+public class Musics
 {
     private long id;
     private String path;

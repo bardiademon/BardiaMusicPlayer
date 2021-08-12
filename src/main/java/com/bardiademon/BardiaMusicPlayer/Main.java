@@ -6,6 +6,7 @@ import com.bardiademon.BardiaMusicPlayer.models.Database;
 import com.bardiademon.BardiaMusicPlayer.models.Favourites.FavouritesService;
 import com.bardiademon.BardiaMusicPlayer.models.Musics.MusicsService;
 import com.bardiademon.BardiaMusicPlayer.models.PlayList.PlayListService;
+import com.bardiademon.BardiaMusicPlayer.models.PlayedMusicService;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +27,7 @@ public final class Main extends Application
     private static final MusicsService MUSICS_SERVICE = new MusicsService ();
     private static final PlayListService PLAY_LIST_SERVICE = new PlayListService ();
     private static final FavouritesService FAVOURITES_SERVICE = new FavouritesService ();
+    private static final PlayedMusicService PLAYED_MUSIC_SERVICE = new PlayedMusicService ();
 
     private static PlayerController playerController;
 
@@ -181,5 +183,10 @@ public final class Main extends Application
     public static FavouritesService getFavouritesService ()
     {
         return FAVOURITES_SERVICE;
+    }
+
+    public static PlayedMusicService getPlayedMusicService ()
+    {
+        return PLAYED_MUSIC_SERVICE;
     }
 }

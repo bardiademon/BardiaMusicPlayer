@@ -7,6 +7,7 @@ import com.bardiademon.BardiaMusicPlayer.bardiademon.Path;
 import com.bardiademon.BardiaMusicPlayer.controllers.List.FavouriteController;
 import com.bardiademon.BardiaMusicPlayer.controllers.List.ListController;
 import com.bardiademon.BardiaMusicPlayer.controllers.List.MusicsController;
+import com.bardiademon.BardiaMusicPlayer.controllers.List.PlayedMusicController;
 import com.bardiademon.BardiaMusicPlayer.models.Favourites.FavouritesService;
 import com.bardiademon.MusicPlayer.BardiaPlayer;
 import com.bardiademon.MusicPlayer.On;
@@ -253,6 +254,8 @@ public final class PlayerController implements Initializable, On
         });
 
         setImageBtnFavouritesOrNot ();
+
+        Main.getPlayedMusicService ().add (musicPlaying);
     }
 
     @Override
@@ -403,7 +406,7 @@ public final class PlayerController implements Initializable, On
 
     private enum Panes
     {
-        player, play_list, musics, favourites
+        player, play_list, musics, favourites, played_music
     }
 
     @Override
@@ -627,7 +630,7 @@ public final class PlayerController implements Initializable, On
     @FXML
     public void onClickBtnPlayedMusic ()
     {
-
+        loadListPane (Panes.played_music , new PlayedMusicController ());
     }
 
     @FXML
