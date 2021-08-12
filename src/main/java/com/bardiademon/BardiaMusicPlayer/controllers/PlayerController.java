@@ -620,13 +620,7 @@ public final class PlayerController implements Initializable, On
     {
         Platform.runLater (() -> btnFavourites.setImage (getImage (Path.R_PF_LIKE)));
     }
-
-    @FXML
-    public void onClickBtnSelectedMusic ()
-    {
-
-    }
-
+    
     @FXML
     public void onClickBtnPlayedMusic ()
     {
