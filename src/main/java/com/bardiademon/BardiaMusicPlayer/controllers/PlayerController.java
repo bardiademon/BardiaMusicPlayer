@@ -121,7 +121,6 @@ public final class PlayerController implements Initializable, On
     @FXML
     public Text txtTime;
 
-
     @FXML
     public MFXListView <PathMusic> otherMusic;
 
@@ -438,8 +437,7 @@ public final class PlayerController implements Initializable, On
             }
         }
 
-
-        setBtnList (btnPlayList , btnMusics , btnLstFavourites , btnSelectedMusic , btnPlayedMusic , btnPlayer);
+        setBtnList (btnPlayList , btnMusics , btnLstFavourites , btnPlayedMusic , btnPlayer);
         if (panes == null || !panes.equals (Panes.player))
         {
             loadPlayer ();
@@ -620,7 +618,7 @@ public final class PlayerController implements Initializable, On
     {
         Platform.runLater (() -> btnFavourites.setImage (getImage (Path.R_PF_LIKE)));
     }
-    
+
     @FXML
     public void onClickBtnPlayedMusic ()
     {

@@ -17,6 +17,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 public final class Main extends Application
@@ -119,6 +120,8 @@ public final class Main extends Application
 
     public static URL GetResource (final String Path)
     {
+        System.out.println (Paths.get (Path));
+        System.out.println (Paths.get (Path).toAbsolutePath ());
         try
         {
             final URL resource = (Main.class.getClassLoader ()).getResource (Path);
