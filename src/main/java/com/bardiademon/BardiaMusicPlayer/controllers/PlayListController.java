@@ -171,7 +171,7 @@ public final class PlayListController implements Initializable
                 Platform.runLater (() ->
                 {
                     btnRemovePlayList.setDisable (true);
-                    final URL url = Main.GetResource (Path.NPL_WAITING);
+                    final URL url = Main.GetResource (PlayListController.class , Path.NPL_WAITING);
                     if (url != null)
                     {
                         try
@@ -199,7 +199,7 @@ public final class PlayListController implements Initializable
                 Platform.runLater (() ->
                 {
                     btnRemovePlayList.setDisable (false);
-                    final URL url = Main.GetResource (Path.PLI_REMOVE_LIST);
+                    final URL url = Main.GetResource (PlayListController.class , Path.PLI_REMOVE_LIST);
                     if (url != null)
                     {
                         try

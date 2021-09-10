@@ -218,7 +218,7 @@ public final class NewPlayListController implements Initializable
     private boolean checkMusic (final String path)
     {
         final String extension = FilenameUtils.getExtension (path);
-        return (extension != null && !extension.isEmpty () && extension.toLowerCase(Locale.ROOT).equals ("mp3"));
+        return (extension != null && !extension.isEmpty () && extension.toLowerCase (Locale.ROOT).equals ("mp3"));
     }
 
     public void setCounterFindFile ()
@@ -288,7 +288,7 @@ public final class NewPlayListController implements Initializable
 
             try
             {
-                final URL urlWaiting = Main.GetResource (imagePath);
+                final URL urlWaiting = Main.GetResource (NewPlayListController.class , imagePath);
                 if (urlWaiting != null) imtBtnAdd.setImage (new Image (urlWaiting.openStream ()));
             }
             catch (final IOException e)

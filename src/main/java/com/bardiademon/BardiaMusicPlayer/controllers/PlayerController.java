@@ -37,6 +37,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -192,7 +193,10 @@ public final class PlayerController implements Initializable, On
         {
             try
             {
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream (inputStream.available ());
+                final ByteArrayOutputStream outputStream = new ByteArrayOutputStream (inputStream.available ());
+                outputStream.write (inputStream.readAllBytes ());
+
+                final ByteArrayOutputStream image2 = new ByteArrayOutputStream (inputStream.available ());
                 outputStream.write (inputStream.readAllBytes ());
 
                 musicImage.setImage (new Image (new ByteArrayInputStream (outputStream.toByteArray ())));
@@ -213,7 +217,7 @@ public final class PlayerController implements Initializable, On
     @Override
     public void onAlbumImageError ()
     {
-        final URL url = Main.GetResource (Path.R_MUSIC);
+        final URL url = Main.GetResource (PlayerController.class , Path.R_MUSIC);
         if (url != null) Platform.runLater (() ->
         {
             try
@@ -253,8 +257,6 @@ public final class PlayerController implements Initializable, On
         });
 
         setImageBtnFavouritesOrNot ();
-
-        Main.getPlayedMusicService ().add (musicPlaying);
     }
 
     @Override
@@ -376,7 +378,7 @@ public final class PlayerController implements Initializable, On
 
     private Image getImage (final String path)
     {
-        final URL urlOneRepeat = Main.GetResource (path);
+        final URL urlOneRepeat = Main.GetResource (PlayerController.class , path);
         if (urlOneRepeat != null)
         {
             try
@@ -412,7 +414,7 @@ public final class PlayerController implements Initializable, On
     public void initialize (final URL url , final ResourceBundle resourceBundle)
     {
 
-        final URL urlPlayerPlay = Main.GetResource (Path.R_PLAYER_PLAY);
+        final URL urlPlayerPlay = Main.GetResource (PlayerController.class , Path.R_PLAYER_PLAY);
         if (urlPlayerPlay != null)
         {
             try
@@ -424,7 +426,7 @@ public final class PlayerController implements Initializable, On
                 Log.N (e);
             }
         }
-        final URL urlPlayerPause = Main.GetResource (Path.R_PLAYER_PAUSE);
+        final URL urlPlayerPause = Main.GetResource (PlayerController.class , Path.R_PLAYER_PAUSE);
         if (urlPlayerPause != null)
         {
             try
@@ -453,6 +455,7 @@ public final class PlayerController implements Initializable, On
             try
             {
                 fxmlLoader.setController (PlayerController.this);
+//                Main.setStage (new Scene (fxmlLoader.load ()));
                 fxmlLoader.load ();
 
                 otherMusic.setBackground (new Background (new BackgroundFill (Color.BLACK , new CornerRadii (0) , new Insets (0))));
@@ -521,16 +524,30 @@ public final class PlayerController implements Initializable, On
 
     public void play (final String path)
     {
-        if (player != null) player.die ();
-        player = new BardiaPlayer ();
+        if (new File (path).exists ())
+        {
+            try
+            {
+                if (player != null) player.die ();
+            }
+            catch (final Exception e)
+            {
+                Log.N (e);
+            }
 
-        player.setMusic (path , this);
+            Main.getPlayedMusicService ().add (musicPlaying);
 
-        musicPlaying = path;
+            player = new BardiaPlayer ();
 
-        player.start ();
+            player.setMusic (path , this);
 
-        setPlay ();
+            musicPlaying = path;
+
+            player.start ();
+
+            setPlay ();
+        }
+        else Log.N (new Exception ("File not exists <" + path + ">"));
     }
 
     private void setPlay ()
@@ -665,7 +682,6 @@ public final class PlayerController implements Initializable, On
             return path;
         }
 
-
         @Override
         public String toString ()
         {
@@ -685,6 +701,15 @@ public final class PlayerController implements Initializable, On
                 indexPlay = selectedIndex;
                 play ();
             }
+        }
+    }
+
+    public void diePlayer ()
+    {
+        if (player != null)
+        {
+            player.close ();
+            player.die ();
         }
     }
 

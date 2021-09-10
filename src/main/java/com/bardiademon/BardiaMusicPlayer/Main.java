@@ -7,6 +7,7 @@ import com.bardiademon.BardiaMusicPlayer.models.Favourites.FavouritesService;
 import com.bardiademon.BardiaMusicPlayer.models.Musics.MusicsService;
 import com.bardiademon.BardiaMusicPlayer.models.PlayList.PlayListService;
 import com.bardiademon.BardiaMusicPlayer.models.PlayedMusicService;
+import com.bardiademon.MusicPlayer.Default;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -17,8 +18,6 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Paths;
-import java.util.Objects;
 
 public final class Main extends Application
 {
@@ -37,7 +36,7 @@ public final class Main extends Application
     @Override
     public void start (final Stage stage) throws Exception
     {
-        final Parent root = FXMLLoader.load (Objects.requireNonNull (getClass ().getResource ("/view/splash.fxml")));
+        final Parent root = FXMLLoader.load (getResourceView ("splash"));
         stage.initStyle (StageStyle.UNDECORATED);
         stage.setTitle ("Hello World");
         stage.setScene (new Scene (root));
@@ -64,9 +63,40 @@ public final class Main extends Application
         }).start ();
     }
 
+    public static URL getResourceView (final String path)
+    {
+        final URL url = GetResource (Main.class , "/view/" + path + ".fxml");
+        if (url != null) return url;
+        else
+        {
+            die ("Not found view!");
+            return null;
+        }
+    }
+
+    public static void die (final String message)
+    {
+        new Thread (() ->
+        {
+            try
+            {
+                final PlayerController playerController = getPlayerController ();
+                if (playerController != null) playerController.diePlayer ();
+            }
+            catch (final Exception ignored)
+            {
+            }
+            Platform.runLater (Platform::exit);
+            System.gc ();
+            System.exit (0);
+            System.out.println (message);
+        }).start ();
+
+    }
+
     public static <T> T Launch (final String FXMLFilename , final String Title , final Controller <T> _Controller)
     {
-        final URL resource = GetResource ("view/" + FXMLFilename + ".fxml");
+        final URL resource = getResourceView (FXMLFilename);
 
         final var objController = new Object ()
         {
@@ -95,37 +125,44 @@ public final class Main extends Application
 //                    }
 //                });
                 stage.setScene (new Scene (fxmlLoader.load ()));
+
                 if (_Controller != null)
                 {
                     objController.controller = fxmlLoader.getController ();
                     _Controller.GetController (objController.controller , stage);
                 }
+
+                stage.setOnCloseRequest (windowEvent -> Main.die (Default.POWERED_BY + "\nClosed the Bardia Music\n"));
+
                 stage.show ();
             }
             catch (final IOException e)
             {
                 Log.N (e);
             }
-
         }
         else Log.N (new Exception ("Resource is null."));
 
         return objController.controller;
     }
 
-    public static FXMLLoader GetFXMLLoader (final String fxmlName)
+    public static void setStage (final Scene scene)
     {
-        return (new FXMLLoader (GetResource ("view/" + fxmlName + ".fxml")));
+        stage = new Stage ();
+        stage.setScene (scene);
     }
 
-    public static URL GetResource (final String Path)
+    public static FXMLLoader GetFXMLLoader (final String fxmlName)
     {
-        System.out.println (Paths.get (Path));
-        System.out.println (Paths.get (Path).toAbsolutePath ());
+        return (new FXMLLoader (getResourceView (fxmlName)));
+    }
+
+    public static <T> URL GetResource (final Class <T> t , final String Path)
+    {
         try
         {
-            final URL resource = (Main.class.getClassLoader ()).getResource (Path);
-            if (resource == null) throw new Exception ("Not found path resource: " + Path);
+            final URL resource = t.getResource (Path);
+            if (resource == null) throw new IOException ("Path not found <" + Path + ">");
             else return resource;
         }
         catch (final Exception e)
@@ -136,7 +173,7 @@ public final class Main extends Application
         return null;
     }
 
-    public interface Controller<T>
+    public interface Controller <T>
     {
         void GetController (final T t , final Stage stage);
     }
